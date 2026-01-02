@@ -16,7 +16,7 @@ This repository contains a Content-Based Filtering recommendation system for mov
 The system operates in two main phases:
 
 1.  **Training (Offline):**
-    -   Data ingestion from `movies.csv`.
+    -   Data ingestion from `movies_sample.csv`.
     -   Preprocessing: Cleaning text, handling missing values, and combining features into a single "soup" string.
     -   Feature Extraction: TF-IDF Vectorization (max 5000 features).
     -   Modeling: Unsupervised Nearest Neighbors with Cosine Similarity metric.
