@@ -58,8 +58,10 @@ class MovieRecommender:
             
             movie_data = self.movies_df.iloc[neighbor_idx]
             recommendations.append({
+                'id': movie_data['id'],
                 'title': movie_data['title'],
                 'genres': movie_data['genres'],
+                'poster_path': movie_data.get('poster_path'),
                 'vote_average': movie_data['vote_average'],
                 'overview': movie_data['overview'],
                 'similarity_score': 1 - distances[0][i]
