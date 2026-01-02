@@ -91,7 +91,6 @@ def main():
     with tab1:
         st.markdown("<br>", unsafe_allow_html=True)
         
-        # Centered layout for search
         col1, col2, col3 = st.columns([1, 2, 1])
         
         with col2:

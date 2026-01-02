@@ -49,17 +49,33 @@ class MovieRecommender:
 
         movie_vec = self.tfidf_matrix[idx]
         
-        distances, neighbor_indices = self.nn_model.kneighbors(movie_vec, n_neighbors=n_recommendations+1)
+        # Query more neighbors to account for self and potential duplicates
+        
+        distances, neighbor_indices = self.nn_model.kneighbors(movie_vec, n_neighbors=n_recommendations + 10)
         
         recommendations = []
+        seen_titles = set()
+        
         for i, neighbor_idx in enumerate(neighbor_indices[0]):
             if neighbor_idx == idx:
                 continue
             
             movie_data = self.movies_df.iloc[neighbor_idx]
+            movie_title = movie_data['title']
+            
+            if movie_title in seen_titles:
+                continue
+            
+            # Ensure we don't recommend the query movie itself (by title match)
+
+            if movie_title == title:
+                continue
+                
+            seen_titles.add(movie_title)
+            
             recommendations.append({
                 'id': movie_data['id'],
-                'title': movie_data['title'],
+                'title': movie_title,
                 'genres': movie_data['genres'],
                 'poster_path': movie_data.get('poster_path'),
                 'vote_average': movie_data['vote_average'],
