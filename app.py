@@ -104,9 +104,9 @@ def main():
             """, unsafe_allow_html=True)
             
             if recommender is None or recommender.indices is None:
-                st.warning("⚠️ Models not found!")
+                st.warning("Models not found!")
                 st.write("The recommendation engine needs to be trained first.")
-                if st.button("🚀 Train Model Now", type="primary", use_container_width=True):
+                if st.button("Train Model Now", type="primary", use_container_width=True):
                     with st.spinner("Training model... This usually takes about 30 seconds."):
                         try:
                             train()

@@ -5,6 +5,7 @@ __pycache__/
 
 # Data & Models (Large files - do not commit)
 data/
+!data/movies_sample.csv
 models/
 *.joblib
 *.csv

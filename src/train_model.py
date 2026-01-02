@@ -7,7 +7,8 @@ import joblib
 import os
 import re
 
-DATA_PATH = 'data/movies.csv'
+# Constants
+DATA_PATH = 'data/movies_sample.csv'
 MODELS_DIR = 'models/'
 MIN_VOTE_COUNT = 50
 MAX_FEATURES = 5000
