@@ -116,7 +116,7 @@ def main():
                         label_visibility="collapsed"
                     )
                 else:
-                    selected_movie = st.text_input("Enter movie title:", label_visibility="collapsed")
+                    selected_movie = st.text_input("Enter movie title", label_visibility="collapsed")
 
             with btn_col:
                 if st.button("Recommend", type="primary", use_container_width=True):
@@ -131,7 +131,7 @@ def main():
                     st.error(recommendations)
                 else:
                     st.markdown("---")
-                    st.subheader(f"Because you watched *{selected}*:")
+                    st.subheader(f"Because you watched *{selected}*")
                     
                     cols = st.columns(5)
                     for idx, movie in enumerate(recommendations):
