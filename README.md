@@ -1,6 +1,9 @@
 
 # Movie Recommendation System
 
+[![GitHub](https://img.shields.io/badge/GitHub-devlucascfarias-181717?style=for-the-badge&logo=github)](https://github.com/devlucascfarias)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Lucas%20Correia-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/lucas-correia-b856152b5/)
+
 ## Overview
 This repository contains a Content-Based Filtering recommendation system for movies. The application suggests movies similar to a user-provided title by analyzing metadata such as genres, overview, keywords, and credits. It utilizes Natural Language Processing (NLP) techniques and Nearest Neighbors algorithms to calculate similarity.
 

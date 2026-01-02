@@ -96,7 +96,16 @@ def main():
         
         with col2:
             st.markdown("""
-                <h1 style='text-align: center; margin-bottom: 2rem;'>Movie Recommendation System</h1>
+                <h1 style='text-align: center; margin-bottom: 1rem;'>Movie Recommendation System</h1>
+                <div style='text-align: center; margin-bottom: 2rem;'>
+                    <a href="https://github.com/devlucascfarias" target="_blank">
+                        <img src="https://img.shields.io/badge/GitHub-devlucascfarias-181717?style=for-the-badge&logo=github" alt="GitHub">
+                    </a>
+                    &nbsp;&nbsp;
+                    <a href="https://www.linkedin.com/in/lucas-correia-b856152b5/" target="_blank">
+                        <img src="https://img.shields.io/badge/LinkedIn-Lucas%20Correia-0077B5?style=for-the-badge&logo=linkedin" alt="LinkedIn">
+                    </a>
+                </div>
                 <p style='text-align: center; color: #666;'>
                     This system utilizes content-based filtering via TF-IDF vectorization and nearest neighbors. 
                     Type in a movie you liked, and the recommendation algorithm will suggest similar movies.
