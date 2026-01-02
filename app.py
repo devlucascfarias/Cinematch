@@ -103,36 +103,24 @@ def main():
                 </p>
             """, unsafe_allow_html=True)
             
-            if recommender is None or recommender.indices is None:
-                st.warning("Models not found!")
-                st.write("The recommendation engine needs to be trained first.")
-                if st.button("Train Model Now", type="primary", use_container_width=True):
-                    with st.spinner("Training model... This usually takes about 30 seconds."):
-                        try:
-                            train()
-                            st.cache_resource.clear()
-                            st.rerun()
-                        except Exception as e:
-                            st.error(f"Training failed: {e}")
-            else:
-                search_col, btn_col = st.columns([4, 1])
-                
-                with search_col:
-                    if recommender.indices is not None:
-                        movie_list = recommender.indices.index.tolist()
-                        selected_movie = st.selectbox(
-                            "Select a movie:",
-                            movie_list,
-                            index=None,
-                            placeholder="Type to search...",
-                            label_visibility="collapsed"
-                        )
-                    else:
-                        selected_movie = st.text_input("Enter movie title:", label_visibility="collapsed")
-    
-                with btn_col:
-                    if st.button("Recommend", type="primary", use_container_width=True):
-                        st.session_state['selected_movie'] = selected_movie
+            search_col, btn_col = st.columns([4, 1])
+            
+            with search_col:
+                if recommender and recommender.indices is not None:
+                    movie_list = recommender.indices.index.tolist()
+                    selected_movie = st.selectbox(
+                        "Select a movie:",
+                        movie_list,
+                        index=None,
+                        placeholder="Type to search...",
+                        label_visibility="collapsed"
+                    )
+                else:
+                    selected_movie = st.text_input("Enter movie title:", label_visibility="collapsed")
+
+            with btn_col:
+                if st.button("Recommend", type="primary", use_container_width=True):
+                    st.session_state['selected_movie'] = selected_movie
             
         if 'selected_movie' in st.session_state and st.session_state['selected_movie']:
             selected = st.session_state['selected_movie']

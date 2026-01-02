@@ -3,12 +3,14 @@
 __pycache__/
 *.pyc
 
-# Data & Models (Large files - do not commit)
+# Data (Large files - do not commit)
 data/
 !data/movies_sample.csv
-models/
-*.joblib
 *.csv
+
+# Models (Allowed)
+# models/
+# *.joblib
 
 # IDE
 .vscode/
