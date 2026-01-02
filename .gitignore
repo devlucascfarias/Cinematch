@@ -1,14 +1,14 @@
-
-# Environment variables
 .env
 
-# Python
 __pycache__/
 *.pyc
 
-# Data
+# Data & Models (Large files - do not commit)
 data/
 models/
+*.joblib
+*.csv
 
 # IDE
 .vscode/
+.idea/
