@@ -15,6 +15,7 @@ class MovieRecommender:
         self.tfidf_matrix = None
         self.movies_df = None
         self.indices = None
+        self.metrics = None
         
         self.load_models()
 
@@ -27,6 +28,15 @@ class MovieRecommender:
             self.tfidf_matrix = joblib.load(os.path.join(self.models_dir, 'tfidf_matrix.joblib'))
             self.movies_df = joblib.load(os.path.join(self.models_dir, 'movies_metadata.joblib'))
             self.indices = joblib.load(os.path.join(self.models_dir, 'indices.joblib'))
+
+
+        # loa
+            try:
+                self.metrics = joblib.load(os.path.join(self.models_dir, 'training_metrics.joblib'))
+            except FileNotFoundError:
+                self.metrics = None
+                print("Warning: training_metrics.joblib not found.")
+                
             print("Models loaded successfully.")
         except FileNotFoundError as e:
             print(f"Error loading models: {e}. Please ensure 'train_model.py' has been run.")

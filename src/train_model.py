@@ -6,6 +6,8 @@ from sklearn.neighbors import NearestNeighbors
 import joblib
 import os
 import re
+import time
+import datetime
 
 # Constants
 DATA_PATH = 'data/movies_sample.csv'
@@ -55,6 +57,7 @@ def create_soup(df: pd.DataFrame) -> pd.DataFrame:
 
 def train():
     """Executes the training pipeline and saves artifacts."""
+    start_time = time.time()
     if not os.path.exists(MODELS_DIR):
         os.makedirs(MODELS_DIR)
 
@@ -79,6 +82,25 @@ def train():
     
     indices = pd.Series(df_meta.index, index=df_meta['title']).drop_duplicates()
     joblib.dump(indices, os.path.join(MODELS_DIR, 'indices.joblib'))
+    
+    # Save training metrics
+    
+    end_time = time.time()
+    execution_time = end_time - start_time
+    
+    sparsity = 1.0 - (tfidf_matrix.nnz / (tfidf_matrix.shape[0] * tfidf_matrix.shape[1]))
+    
+    metrics = {
+        'training_timestamp': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        'execution_time_seconds': round(execution_time, 2),
+        'total_movies_processed': tfidf_matrix.shape[0],
+        'vocabulary_size': tfidf_matrix.shape[1],
+        'matrix_sparsity': f"{sparsity:.4%}",
+        'model_parameters': nn_model.get_params()
+    }
+    
+    joblib.dump(metrics, os.path.join(MODELS_DIR, 'training_metrics.joblib'))
+    print(f"Training metrics saved: {metrics}")
     
     print("Training completed successfully!")
 

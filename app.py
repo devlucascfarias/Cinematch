@@ -86,7 +86,7 @@ def main():
     except Exception:
         recommender = None
 
-    tab1, tab2 = st.tabs(["Recommendations", "Technical Architecture"])
+    tab1, tab2, tab3 = st.tabs(["Recommendations", "Metrics", "Technical Architecture"])
 
     with tab1:
         st.markdown("<br>", unsafe_allow_html=True)
@@ -127,7 +127,7 @@ def main():
                     selected_movie = st.text_input("Enter movie title", label_visibility="collapsed")
 
             with btn_col:
-                if st.button("Recommend", type="primary", use_container_width=True):
+                if st.button("Recommend", type="primary", width="stretch"):
                     st.session_state['selected_movie'] = selected_movie
             
         if 'selected_movie' in st.session_state and st.session_state['selected_movie']:
@@ -155,6 +155,80 @@ def main():
                                 st.write(movie['overview'][:150] + "..." if len(str(movie['overview'])) > 150 else movie['overview'])
 
     with tab2:
+        if recommender and recommender.movies_df is not None:
+            st.header("Dataset Metrics")
+            
+            df = recommender.movies_df
+            
+            # Key Metrics
+            m1, m2, m3 = st.columns(3)
+            m1.metric("Total Movies", f"{len(df):,}")
+            m2.metric("Average Rating", f"{df['vote_average'].mean():.2f}")
+            m3.metric("Total Votes Scanned", f"{df['vote_count'].sum():,}")
+            
+            st.markdown("---")
+            
+            # Charts
+            c1, c2 = st.columns(2)
+            
+            with c1:
+                st.subheader("Top 10 Highest Rated Movies")
+                top_rated = df.nlargest(10, 'vote_average')[['title', 'vote_average', 'vote_count']]
+                st.dataframe(top_rated.set_index('title'), width="stretch")
+                
+            with c2:
+                st.subheader("Ratings Distribution")
+                # Simple histogram using bins via value_counts on rounded values for simplicity in st.bar_chart
+                ratings_dist = df['vote_average'].round(1).value_counts().sort_index()
+                st.bar_chart(ratings_dist, color='#ff4b4b')
+                
+            st.markdown("---")
+            st.subheader("Genre Distribution")
+            
+            # Parse genres - assuming simple split logic might apply, but let's try a robust approach
+            # If genres are like "Action-Adventure", we replace - with space then split? 
+            # Or just raw count if already lists. The recommender view showed strings. 
+            # Let's assume standard separators (comma or hyphen).
+            try:
+                # Count occurrences of each genre token
+                from collections import Counter
+                # Clean up: remove spaces, lowercase, split by common delimiters
+                # This is an estimation since we don't have the exact delimiter confirmed other than inference.
+                # Assuming ' ' from the soup creation logic, but let's look at the raw 'genres' in df_meta.
+                # In train_model.py: df_filtered = df ... df_meta = df[...]
+                # The 'genres' column in df_meta is the ORIGINAL from CSV loaded via pd.read_csv.
+                # So we count strings.
+                
+                all_genres = []
+                for g in df['genres'].dropna().astype(str):
+                    # Split by common delimiters
+                    tokens = [t.strip() for t in g.replace('-', ',').replace(' ', ',').split(',') if t.strip()]
+                    all_genres.extend(tokens)
+                
+                genre_counts = pd.Series(Counter(all_genres)).sort_values(ascending=False).head(15)
+                st.bar_chart(genre_counts, color='#ff4b4b', horizontal=True)
+            except Exception as e:
+                st.warning(f"Could not generate genre distribution: {e}")
+            
+            st.markdown("---")
+            st.subheader("Training Meta-Data")
+            
+            if recommender.metrics:
+                met = recommender.metrics
+                c1, c2, c3 = st.columns(3)
+                c1.metric("Training Time", f"{met.get('execution_time_seconds', 0)}s")
+                c2.metric("Vocabulary Size", f"{met.get('vocabulary_size', 0):,}")
+                c3.metric("Matrix Sparsity", met.get('matrix_sparsity', 'N/A'))
+                
+                st.caption(f"Model trained on: {met.get('training_timestamp', 'Unknown')}")
+                with st.expander("Model Parameters"):
+                    st.json(met.get('model_parameters', {}))
+            else:
+                st.info("Training metrics not available. Re-run training to generate.")
+        else:
+            st.warning("Metrics unavailable. Model data not loaded.")
+
+    with tab3:
         st.header("Technical Report & Architecture")
         st.markdown("""
         This project demonstrates a production-ready **Content-Based Filtering** recommendation system.
