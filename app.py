@@ -217,7 +217,7 @@ def main():
         st.header("Technical Report & Architecture")
         st.markdown("""
         This project demonstrates a production-ready **Content-Based Filtering** recommendation system.
-        It leverages natural language processing and nearest neighbor algorithms to suggest movies based on metadata similarity.
+        Nearest neighbor algorithms to suggest movies based on metadata similarity.
         
         ### Tech Stack
         
