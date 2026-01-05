@@ -160,7 +160,6 @@ def main():
             
             df = recommender.movies_df
             
-            # Key Metrics
             m1, m2, m3 = st.columns(3)
             m1.metric("Total Movies", f"{len(df):,}")
             m2.metric("Average Rating", f"{df['vote_average'].mean():.2f}")
@@ -168,7 +167,6 @@ def main():
             
             st.markdown("---")
             
-            # Charts
             c1, c2 = st.columns(2)
             
             with c1:
@@ -178,30 +176,17 @@ def main():
                 
             with c2:
                 st.subheader("Ratings Distribution")
-                # Simple histogram using bins via value_counts on rounded values for simplicity in st.bar_chart
                 ratings_dist = df['vote_average'].round(1).value_counts().sort_index()
                 st.bar_chart(ratings_dist, color='#ff4b4b')
                 
             st.markdown("---")
             st.subheader("Genre Distribution")
             
-            # Parse genres - assuming simple split logic might apply, but let's try a robust approach
-            # If genres are like "Action-Adventure", we replace - with space then split? 
-            # Or just raw count if already lists. The recommender view showed strings. 
-            # Let's assume standard separators (comma or hyphen).
             try:
-                # Count occurrences of each genre token
                 from collections import Counter
-                # Clean up: remove spaces, lowercase, split by common delimiters
-                # This is an estimation since we don't have the exact delimiter confirmed other than inference.
-                # Assuming ' ' from the soup creation logic, but let's look at the raw 'genres' in df_meta.
-                # In train_model.py: df_filtered = df ... df_meta = df[...]
-                # The 'genres' column in df_meta is the ORIGINAL from CSV loaded via pd.read_csv.
-                # So we count strings.
-                
+
                 all_genres = []
                 for g in df['genres'].dropna().astype(str):
-                    # Split by common delimiters
                     tokens = [t.strip() for t in g.replace('-', ',').replace(' ', ',').split(',') if t.strip()]
                     all_genres.extend(tokens)
                 
